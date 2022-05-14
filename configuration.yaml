@@ -1,0 +1,111 @@
+type: vertical-stack
+cards:
+  - type: entities
+    title: Internet
+    show_header_toggle: false
+    entities:
+      - entity: sensor.speedtest_download
+        type: custom:multiple-entity-row
+      - entity: sensor.speedtest_upload
+        type: custom:multiple-entity-row
+      - entity: sensor.speedtest_ping
+        type: custom:multiple-entity-row
+      - entity: automation.nova_automatizacao_4
+        type: custom:multiple-entity-row
+        name: Last Update
+        show_state: false
+        icon: mdi:update
+        secondary_info: last-updated
+    theme: ios-dark-mode-dark-green
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        name: Mbit/s Download
+        unit: ' '
+        min: 0
+        max: 200
+        severity:
+          red: 0
+          yellow: 30
+          green: 50
+        needle: true
+        entity: sensor.speedtest_download
+      - type: gauge
+        name: Mbit/s Upload
+        unit: ' '
+        min: 0
+        max: 200
+        severity:
+          red: 0
+          yellow: 30
+          green: 50
+        entity: sensor.speedtest_upload
+        needle: true
+  - type: custom:apexcharts-card
+    graph_span: 8h
+    header:
+      show: true
+      title: Speedtest
+    apex_config:
+      responsive:
+        - breakpoint: 765
+          options:
+            chart:
+              height: 500px
+        - breakpoint: 1025
+          options:
+            chart:
+              height: 400px
+        - breakpoint: 10000
+          options:
+            chart:
+              height: auto
+      stroke:
+        curve: smooth
+      chart:
+        zoom:
+          enabled: true
+        toolbar:
+          show: true
+          tools:
+            zoom: true
+            zoomin: true
+            zoomout: true
+            pan: true
+            reset: true
+      plotOptions:
+        bar:
+          columnWidth: 50%
+      legend:
+        showForSingleSeries: true
+    series:
+      - entity: sensor.speedtest_download
+        show:
+          extremas: true
+        stroke_width: 3
+        fill_raw: last
+        name: Download
+        type: line
+        group_by:
+          func: raw
+          duration: 30min
+      - entity: sensor.speedtest_upload
+        show:
+          extremas: true
+        stroke_width: 3
+        fill_raw: last
+        name: Upload
+        type: line
+        group_by:
+          func: raw
+          duration: 30min
+      - entity: sensor.speedtest_ping
+        show:
+          extremas: true
+        stroke_width: 3
+        fill_raw: last
+        name: Ping
+        type: column
+        group_by:
+          func: raw
+          duration: 30min
